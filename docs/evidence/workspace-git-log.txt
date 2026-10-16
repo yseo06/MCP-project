@@ -1,0 +1,2 @@
+bc0845e Implement done() and add test stub
+781ff0b Scaffold todo-cli with add and list
