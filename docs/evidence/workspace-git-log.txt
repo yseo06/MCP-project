@@ -1,2 +1,2 @@
-bc0845e Implement done() and add test stub
-781ff0b Scaffold todo-cli with add and list
+﻿00e1b23 Add error handling to greet() and CLI main; update PROJECT_STATE
+2ec6454 Add greeting-cli with greet function and project goal

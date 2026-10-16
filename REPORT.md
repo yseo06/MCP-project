@@ -1,6 +1,6 @@
 # Midterms Pt 1 Report: MCP Workspace Server
 
-**Name:** ______  **Section:** CS 3A / 3B  **Repo:** ______  **Public URL (static domain):** ______
+**Name:** Emmanuel Enriquez  **Section:** CS 3A  **Repo:** public  **Public URL:** `https://ramrod-likewise-dispatch.ngrok-free.dev`
 
 ## 1. Stack and why
 
@@ -40,10 +40,11 @@
 
 ## 4. Efficiency evidence (fill in from your own real-client run)
 
-- Task: ______________________  Sessions: ___  Total tool calls: ___  Errors: ___ (recovered: ___)
+- Task: Built a greeting CLI with error handling across three sessions  Sessions: 3  Total tool calls: 19  Errors: 0 (recovered: 0)
 - Reference scripted run (`docs/TRANSCRIPT.md`): 25 calls, 2 sessions; resumed from `handoff_read` alone; read 5 lines instead of the whole file; one `if_version` conflict recovered by re-read + retry.
-- What I would change after reading my own logs: ______________________
+- Live run (`docs/LIVE_TRANSCRIPT.md`): 19 calls, 3 sessions; 4 version-pinned `str_replace` edits; 2 handoff resumptions; 2 git commits (`2ec6454`, `00e1b23`); 0 errors.
+- What I would change after reading my own logs: Claude never used `log_plan` or `record_decision` until explicitly told to in a third session. I would add those tools to the prompt template in `docs/AGENT_PROMPT.md` so they are used automatically. I would also consider adding a `run_command` tool for script execution so agents can verify their own output.
 
 ## 5. Reflection (3-5 sentences)
 
-What surprised you about how the agent used the tools? Which description did you rewrite and why?
+I was surprised that Claude naturally chained `if_version` hashes across sequential `str_replace` calls without being told to — the tool description alone drove the optimistic-locking behavior. It also always read files before editing, even when it had just written them, because each `str_replace` returned a new version hash it needed. The biggest gap was that Claude only used the tools I explicitly asked for: `DECISIONS.md` and `PLAN_LOG.md` stayed empty through two full coding sessions because the prompt never mentioned `record_decision` or `log_plan`. This taught me that tool *descriptions* guide how a tool is used, but the *prompt* determines whether it is used at all. If I were to redo the exercise, I would bake those tool names into the system prompt so documentation happens automatically. I also rewrote the `str_replace` description mentally after seeing how Claude handled it — the phrase "old_str must appear exactly once" was the single most important constraint, because it forced Claude to include enough surrounding context to make each replacement unambiguous.

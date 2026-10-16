@@ -16,7 +16,9 @@ module.exports = {
       // ngrok with a static domain. Set NGROK_DOMAIN and run `ngrok config add-authtoken ...` once.
       name: "mcp-tunnel",
       script: "ngrok",
-      args: `http --domain=${process.env.NGROK_DOMAIN || "YOUR-STATIC-DOMAIN.ngrok-free.app"} ${process.env.PORT || 3000}`,
+      args: process.env.NGROK_DOMAIN
+        ? `http --url=${process.env.NGROK_DOMAIN} ${process.env.PORT || 3000}`
+        : `http ${process.env.PORT || 3000}`,
       interpreter: "none",
       autorestart: true,
       restart_delay: 5000,
